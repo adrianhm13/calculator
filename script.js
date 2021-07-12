@@ -48,38 +48,36 @@ function pressOperator(operatorPressed) {
 
     if (arrayDisplay.length != 0) {  //If no input numbers, do nothing when press operator
         if (firstInput != "" && secondInput != "") { // if firstInput and secondInput has values, operate them and clean secondInput value, result will be the new firstInput
-            
-            secondInput = parseInt(arrayDisplay.join(''));
+
+            secondInput = parseFloat(arrayDisplay.join(''));
             arrayDisplay.length = 0;
-            
+
             operate(operator, firstInput, secondInput); //First operate with the previous operator 
             showResult();
 
             operator = operatorPressed;  //Then it changes to the new operator pressed to make the new calculation
             secondInput = "";
             firstInput = result;
-            
-            
+
+
         } else {
             if (firstInput == "") {
 
                 operator = operatorPressed;
-                firstInput = parseInt(arrayDisplay.join(''));
+                firstInput = parseFloat(arrayDisplay.join(''));
                 arrayDisplay.length = 0;
                 clearDisplay();
 
             } else {
-                
 
-                secondInput = parseInt(arrayDisplay.join(''));
+                secondInput = parseFloat(arrayDisplay.join(''));
                 arrayDisplay.length = 0;
-                console.log("lalaa")
                 operate(operator, firstInput, secondInput);
                 showResult();
 
                 operator = operatorPressed;
                 firstInput = result;
-                
+
             }
         }
 
@@ -89,27 +87,56 @@ function pressOperator(operatorPressed) {
 }
 
 function pressEqual() {
-    if (result != 0) {
-        firstInput = result;
-        secondInput = parseInt(arrayDisplay.join(''));
-        arrayDisplay.length = 0;
-        operate(operator, firstInput, secondInput);
-        showResult();
+    if (result === NaN) {
+        display.innerHTML = "ERROR";
+        clearAll();
+
     } else {
-        if (firstInput != 0) {
-            secondInput = parseInt(arrayDisplay.join(''));
+
+        if (result != 0) {
+            operator = operatorPressed;
+            firstInput = result;
+            secondInput = parseFloat(arrayDisplay.join(''));
             arrayDisplay.length = 0;
             operate(operator, firstInput, secondInput);
             showResult();
+        } else {
+            if (firstInput != 0) {
+                operator = operatorPressed;
+                secondInput = parseFloat(arrayDisplay.join(''));
+                arrayDisplay.length = 0;
+                operate(operator, firstInput, secondInput);
+                showResult();
+            }
         }
     }
+
 }
+
+function toFloat() {
+    if (!arrayDisplay.includes('.')) {
+        arrayDisplay.push('.')
+    }
+}
+
 function clearDisplay() {
     display.innerHTML = "";
 }
 
 function showResult() {
     display.innerHTML = result;
+}
+
+function clearAll() {
+
+    operator = "";
+    firstInput = "";
+    secondInput = "";
+    result = 0;
+    arrayDisplay.length = 0;
+    if(result != NaN){
+        clearDisplay();
+    }
 }
 
 let result = 0;
@@ -200,6 +227,16 @@ multiplyBtn.addEventListener("click", () => {
 const equalBtn = document.getElementById("equal");
 equalBtn.addEventListener("click", () => {
     pressEqual();
+});
+
+const floatBtn = document.getElementById("floatNum");
+floatBtn.addEventListener("click", () => {
+    toFloat();
+});
+
+const clearBtn = document.getElementById("clearAll");
+clearBtn.addEventListener("click", () => {
+    clearAll();
 });
 const display = document.getElementById("display");
 
